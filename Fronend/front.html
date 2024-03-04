@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Comparator</title>
+<center align><h1>ShopWise</h1><center align>
+<style>
+    body, html {
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+    }
+
+    .container {
+        display: flex;
+        height: 30%;
+    }
+
+    .left-panel, .right-panel {
+        flex: 1;
+        overflow-y: auto;
+    }
+
+    .left-panel {
+        background-color: #f0f0f0;
+    }
+
+    .right-panel {
+        background-color: #e0e0e0;
+    }
+    .textbox{
+        margin-right: 20px;
+    }
+    
+</style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <!-- Content for the left panel -->
+            <!--<h2>Left Panel</h2>-->
+             <form action="/action_page.php">
+  <label for="fname">product 1: </label>
+  <input type="text" id="fname" name="fname" placeholder="enter link 1">
+
+ 
+  <!--<input type="submit">-->
+        </div>
+        <div class="right-panel">
+            <!-- Content for the right panel -->
+            <!--<h2>Right Panel</h2>
+            <p>This is the content of the right panel.</p>-->
+             <form action="/action_page.php">
+  <label for="fname">product 2: </label>
+  <input type="text" id="fname" name="fname" placeholder="enter link 2">
+
+        </div>
+    </div>
+     <form action="/action_page.php">
+  <br><br><label for="fname">requirement: </label>
+  <input type="text" id="fname" name="fname" placeholder="enter requirement">
+ <!--<br> <br> <input type="submit">-->
+<br><br> <button id="showTextBoxes">compare</button>
+<div id="textBoxContainer" class="textbox"></div>
+
+
+<!--<table>
+    <tbody>
+        <tr>
+          <td><textarea oninput="adjustSize(this)"></textarea></td>
+          <td><textarea oninput="adjustSize(this)"></textarea></td>
+         
+        </tr>
+      </tbody>
+    </table>-->
+
+</table>
+<script src="jsnew.js"></script>
+</body>
+</html>
+
