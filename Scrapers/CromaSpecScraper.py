@@ -13,6 +13,7 @@ for spec_div in spec_divs:
     # Find all string values within the div
     strings = spec_div.stripped_strings
     # Append each string value to the list
+    #random comment
     string_values.extend(strings)
 # Print all string values
 print(string_values)
