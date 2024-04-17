@@ -1,5 +1,5 @@
-<script src="jsnew.js"></script>
-<script>
+
+
     function compareProducts() {
         // Get the values of the selected products and requirements
         var product1 = document.getElementById("select1").value;
@@ -19,4 +19,4 @@
         document.getElementById("result1").style.display = "block";
         document.getElementById("result2").style.display = "block";
     }
-</script>
+
