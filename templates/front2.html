@@ -11,6 +11,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="icon" href="C:\Users\Tom\Documents\Programs\Product Comparator\Product-Comparator\Frontend\logo.png" type="image/x-icon">
+
     <style>
         /* General Styles */
         body {
@@ -29,7 +31,6 @@
             border-radius: 10px;
             overflow: hidden;
         }
-        
 
         th {
             background-color: #343a40;
@@ -106,13 +107,8 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             padding: 20px;
             margin-top: 20px;
-            display: none;
+            display: block; /* Making sure this container is visible */
         }
-        #conclusion {
-    margin: 0 auto;
-    text-align: center;
-    margin-top: 60px;
-}
 
         .result-title {
             font-weight: 600;
@@ -128,62 +124,78 @@
     margin-top: 10px; /* You can adjust this value to your preference */
 }
 
-    </style>
+</style>
+
+<style>
+    .pre-wrap {
+        white-space: pre-wrap;
+        width: 50%; /* Adjust the width as needed */
+        max-width: 100px; /* Set a maximum width to prevent excessive stretching */
+        margin: auto; /* Center the container */
+    /*    padding: 10px;  Add padding for better readability */
+    /*    border: 1px solid #ccc;  Add border for better visualization */
+    /*    border-radius: 5px;  Add border radius for a rounded appearance */
+        font-size: 16px;
+        line-height: 1.6;
+    }
+</style>
 
 </head>
 <body>
 
 <div class="container">
     <h1 class="display-5 text-center heading">Product Comparator</h1>
+    <!-- Add an ID to the form -->
+    <form id="productForm" action="/hello_world" method="POST">
+        <table class="table">
+            <tr class="bg-dark text-white">
+                <th>Select Products:</th>
+                <th>
+                    <input type="text" class="form-control" id="select1" name="select1" onchange="updateProduct(1, this.value)" placeholder="Enter Product 1">
+                </th>
+                <th>
+                    <input type="text" class="form-control" id="select2" name="select2" onchange="updateProduct(2, this.value)" placeholder="Enter Product 2">
+                </th>
+            </tr>
+            <tr class="bg-dark text-white">
+                <th>Enter Your Requirements:</th>
+                <td colspan="2">
+                    <textarea class="form-control" id="requirements" name ="requirements" rows="3"></textarea>
+                </td>
+            </tr>
+        </table>
+    
 
-    <table class="table">
-        <tr class="bg-dark text-white">
-            <th>Select Products:</th>
-            <th>
-                <input type="text" class="form-control" id="select1" onchange="updateProduct(1, this.value)" placeholder="Enter Product 1">
-            </th>
-            <th>
-                <input type="text" class="form-control" id="select2" onchange="updateProduct(2, this.value)" placeholder="Enter Product 2">
-            </th>
-        </tr>
-        <tr class="bg-dark text-white">
-            <th>Enter Your Requirements:</th>
-            <td colspan="2">
-                <textarea class="form-control" id="requirements" rows="3"></textarea>
-            </td>
-        </tr>
-    </table>
-
-    <div class="text-center">
-        <button class="compare-btn" onclick="compareProducts()">Compare Products</button>
-    </div>
-
-    <!-- Comparison result containers -->
-    <div class="row mt-5">
-        <div class="col-md-6 result-container" id="result1">
-            <div class="result-title">Result for Product 1</div>
-            <div class="result-text" id="result1-text"></div>
+        <div class="text-center">
+            <button class="compare-btn" onclick="compareProducts()">Compare Products</button>
         </div>
-        <div class="col-md-6 result-container" id="result2">
-            <div class="result-title">Result for Product 2</div>
-            <div class="result-text" id="result2-text"></div>
+    
+        <!-- Comparison result containers -->
+        <div class="row mt-5" id="resultContainer">
+            <div class="col-md-6 result-container" id="result1">
+                <div class="result-title">Result for Product 1</div>
+                <div class="container pre-wrap" id="result1-text"></div>
+                   <pre> {{ info1 | safe }} </pre>
+            </div>
+        
+            <div class="col-md-6 result-container" id="result2">
+                <div class="result-title">Result for Product 2</div>
+                <div class="container pre-wrap" id="result2-text"></div>
+                  <pre>  {{ info2 | safe }} </pre>
+            </div>
         </div>
-    </div>
-    <div class="row mt-5">
-        <div class="col-md-6 result-container" id="price1">
-            <div class="result-title">Price for Product 1</div>
-            <div class="result-text" id="result1-text"></div>
-        </div>
-        <div class="col-md-6 result-container" id="price2">
-            <div class="result-title">Price for Product 2</div>
-            <div class="result-text" id="result2-text"></div>
-        </div>
-        <div class="col-md-6 result-container" id="conclusion">
-            <div class="result-title">Conclusion</div>
-            <div class="result-text" id="result2-text"></div>
-        </div>
-    </div>
+    </form>
 </div>
-<script src="jsnew.js"></script>
+
+<script>
+    // Retrieve input values from local storage and populate form fields
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('select1').value = localStorage.getItem('select1');
+        document.getElementById('select2').value = localStorage.getItem('select2');
+        document.getElementById('requirements').value = localStorage.getItem('requirements');
+    });
+</script>
+
+
 </body>
 </html>

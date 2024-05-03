@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-url = 'https://www.croma.com/xiaomi-a-series-100-cm-40-inch-full-hd-led-smart-google-tv-with-dolby-audio-2023-model-/p/300448'
+url = 'https://www.flipkart.com/seashot-m3-portable-bluetooth-mini-dynamic-metal-sound-google-alexa-siri-assistant-smart-speaker/p/itm5079154737453?pid=ACCGSE9YPKBRPHH6&marketplace=FLIPKART&spotlightTagId=BestsellerId_0pm%2F0o7&srno=b_1_1&fm=organic&ppt=browse&ppn=browse'
 
 req = requests.get(url)
 content = BeautifulSoup(req.content, 'html.parser')
@@ -22,5 +22,5 @@ if len(string_values) == 0:
 print(string_values)
 
 # Pass the URL to the Flask app
-response = requests.post('http://127.0.0.1:5000/hello_world', data={'url': url})
-print(response.text)
+#response = requests.post('http://127.0.0.1:5000/hello_world', data={'url': url})
+#print(response.text)
