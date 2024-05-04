@@ -7,6 +7,14 @@ import re
 
 import google.generativeai as genai
 
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+#from CromaSpecScraper import def_name
+
 genai.configure(api_key='AIzaSyBikkmJTd7ie4cZPnPNEZ_ANLeBlENAGl4')
 model = genai.GenerativeModel('gemini-pro')
 
@@ -52,6 +60,21 @@ def soup(url):
         string_values = []
         return string_values
     
+def selenium_app(url):
+    if url:
+        path = '/Users/Tom/Documents/Programs/Product Comparator/Product-Comparator/chromedriver-win64/chromedriver.exe'
+        service = Service(executable_path=path)
+        driver = webdriver.Chrome(service=service)
+        driver.get(url)
+        wait = WebDriverWait(driver, 10)
+        products = wait.until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="a-keyvalue prodDetTable"]')))
+        string_values = []
+        for spec_div in products:
+            text = spec_div.text.strip()
+            string_values.append(text)
+        
+        driver.quit()
+        return string_values
     
 
 @app.route('/hello_world', methods=['POST'])
@@ -60,21 +83,19 @@ def hello_world():
     product2 = request.form['select2']
     requirements = request.form['requirements']
     
-    raw1 = soup(product1)
-    raw2 = soup(product2)
+    raw1 = selenium_app(product1)
+    raw2 = selenium_app(product2)
     
     test = "Could you simplify the following data so that the average joe can make sense of it while being as concise and descriptive as possible: " + " ".join(raw1)
     
     info1 = model.generate_content(test)
     info = info1.text
     cleaned_info = info.replace("**", "").replace("*", "").strip()
-    print(cleaned_info)
     
     test = "Could you simplify the following data so that the average joe can make sense of it while being as concise and descriptive as possible: " + " ".join(raw2)
     info2 = model.generate_content(test)
     info2 = info2.text
     cleaned_info2 = info2.replace("**", "").replace("*", "").strip()
-    print(cleaned_info2)
 
 
     # Pass markdown_info1 to the template
