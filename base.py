@@ -64,10 +64,14 @@ def selenium_app(url):
     if url:
         path = '/Users/Tom/Documents/Programs/Product Comparator/Product-Comparator/chromedriver-win64/chromedriver.exe'
         service = Service(executable_path=path)
-        driver = webdriver.Chrome(service=service)
+        op = webdriver.ChromeOptions()
+        op.add_argument('headless')
+        driver = webdriver.Chrome(service=service, options=op)
         driver.get(url)
+        
         wait = WebDriverWait(driver, 10)
         products = wait.until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="a-keyvalue prodDetTable"]')))
+        
         string_values = []
         for spec_div in products:
             text = spec_div.text.strip()
