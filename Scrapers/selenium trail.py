@@ -3,22 +3,31 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 
-website = 'https://www.amazon.in/Acer-Predator-Processor-Windows-PHN16-71/dp/B0C3HTXBWP/ref=sr_1_3?crid=25ZSB640RCYW4&dib=eyJ2IjoiMSJ9.wLqXpDOv8tldGY6pAZpRGij2WNRJX2bfZynhuEPnzAXCQozC00CiS5eiMcwq9tUlB2LLPtUTYAq7BGLXRnicJZnvqH3D61sbyC9I5alxss6YUYFIHr4hVKnsPX4UiqKY8bPHBJ00pYCdqmibZHla05ioAAiOE_31vcb7iuot4_a20muViEDjIwTECHc20OW7aqZVZFCDsW6qEU_wLZQvP1_AKQDqk1FOwMrYyc_TwfWRxrLYOglxNlUmm90wmNXqb4ZI7QVWgfjTuZ-oKcdl7V3dkpu4LvthDSb8RVSdaJo.-7uV7j7EXHqzCdlwi4r7bZWo9vqDDy05ppLjnGWvMHo&dib_tag=se&keywords=predator&s=computers&sprefix=predator%2Ccomputers%2C250&sr=1-3&th=1'
+website = 'https://www.flipkart.com/lenovo-ideapad-gaming-3-amd-ryzen-7-octa-core-6800h-16-gb-512-gb-ssd-windows-11-home-4-graphics-nvidia-geforce-rtx-3050-i5arh7d4-laptop/p/itme459756cf8bf4?pid=COMGVQ2YEE7ZFBSW&marketplace=FLIPKART&q=laptop&srno=s_1_5&fm=productRecommendation%2Fsimilar&ppt=pp&ppn=pp&qH=312f91285e048e09'
 path = '/Users/Tom/Documents/Programs/Product Comparator/Product-Comparator/chromedriver-win64/chromedriver.exe'
 service = Service(executable_path=path)
 driver = webdriver.Chrome(service=service)
 
 driver.get(website)
 
-# Wait for the element to be present
-wait = WebDriverWait(driver, 10)
-products = wait.until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="a-keyvalue prodDetTable"]')))
+try:
+    # Wait for the element to be clickable
+    button = WebDriverWait(driver, 25).until(EC.element_to_be_clickable((By.XPATH, "//button[@class='QqFHMw _4FgsLt']")))
+    button.click()
 
-if not products:
-    print("No info")
+    # Wait for product information elements to be present
+    products = WebDriverWait(driver, 40).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="_3Fm-hO"]')))
 
-for product in products:
-    print(product.text)  # Use .text to get the text content of the element
+    if not products:
+        print("No info")
+    else:
+        for product in products:
+            print(product.text)  # Use .text to get the text content of the element
 
-driver.quit()
+except TimeoutException:
+    print("Timed out waiting for elements to load.")
+
+finally:
+    driver.quit()

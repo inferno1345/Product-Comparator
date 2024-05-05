@@ -65,20 +65,32 @@ def selenium_app(url):
         path = '/Users/Tom/Documents/Programs/Product Comparator/Product-Comparator/chromedriver-win64/chromedriver.exe'
         service = Service(executable_path=path)
         op = webdriver.ChromeOptions()
-        op.add_argument('headless')
+        op.add_argument("--headless")
         driver = webdriver.Chrome(service=service, options=op)
         driver.get(url)
         
-        wait = WebDriverWait(driver, 10)
-        products = wait.until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="a-keyvalue prodDetTable"]')))
+        #wait = WebDriverWait(driver, 10)
+        if 'amazon' in url:
+            products = WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="a-keyvalue prodDetTable"]')))
+        elif 'flipkart' in url:
+            button = WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH, "//button[@class='QqFHMw _4FgsLt']")))
+            button.click()
+            products = WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="_3Fm-hO"]')))
+        else:
+            print("Invalid URL:", url)
+            string_values = []
+            return string_values    
         
         string_values = []
         for spec_div in products:
             text = spec_div.text.strip()
             string_values.append(text)
+    else:
+        print("Invalid URL:", url)
+        string_values = []
         
-        driver.quit()
-        return string_values
+    driver.quit()
+    return string_values
     
 
 @app.route('/hello_world', methods=['POST'])
