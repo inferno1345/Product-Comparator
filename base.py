@@ -1,8 +1,6 @@
-import re
 from flask import Flask, render_template, request
 import requests
 from bs4 import BeautifulSoup
-from markdownify import markdownify as md
 import re
 
 import google.generativeai as genai
@@ -76,6 +74,10 @@ def selenium_app(url):
             button = WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH, "//button[@class='QqFHMw _4FgsLt']")))
             button.click()
             products = WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="_3Fm-hO"]')))
+        elif 'jiomart' in url:
+            button = WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH, "//button[@data-target='#pdp_tech_specifications']")))
+            button.click()
+            products = WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="product-specifications-wrapper"]')))
         else:
             print("Invalid URL:", url)
             string_values = []
