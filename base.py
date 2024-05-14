@@ -60,7 +60,7 @@ def soup(url):
     
 def selenium_app(url):
     if url:
-        path = '/Users/Tom/Documents/Programs/Product Comparator/Product-Comparator/chromedriver-win64/chromedriver.exe'
+        path = 'C:/Users/rohan/Visual Studios/Product Comparator Repo/Product-Comparator/chromedriver-win64/chromedriver.exe'
         service = Service(executable_path=path)
         op = webdriver.ChromeOptions()
         op.add_argument("--headless")
