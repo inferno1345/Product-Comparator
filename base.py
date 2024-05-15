@@ -1,38 +1,39 @@
 from flask import Flask, render_template, request
 import requests
-from bs4 import BeautifulSoup
-import re
+import time
+import atexit
 
-import google.generativeai as genai
+from bs4 import BeautifulSoup
+
+from openai import OpenAI
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
-#from CromaSpecScraper import def_name
-
-genai.configure(api_key='AIzaSyBikkmJTd7ie4cZPnPNEZ_ANLeBlENAGl4')
-model = genai.GenerativeModel('gemini-pro')
+from selenium.webdriver.common.keys import Keys 
 
 app = Flask(__name__)
 
-'''client = OpenAI(api_key = 'sk-proj-gyg3FAPF7h6Z2WctUoDzT3BlbkFJljs5VBS1erZDIcng4cXx')
+client = OpenAI(api_key = 'sk-proj-P1Geb3FAub2ams0wnB11T3BlbkFJoKKaUmjYdXrlTHv2HzNr')
 
 def get_completion(prompt): 
-    #print(prompt) 
-    messages=[{"role": "system", "content": "You are a data analyzer who compares information and helps the average person to identify and pros and cons of a product."},
-                  {"role": "user", "content": prompt}]
+    messages=[
+        {"role": "system", "content": "You are a data analyzer who compares information and helps the average person to identify the pros and cons of a product while being as consistent as possible with readable format"},
+        {"role": "user", "content": prompt}
+        ]
     query = client.chat.completions.create(
-        model="davinci-002",
-        messages = messages
-        
-    )
+            model="gpt-3.5-turbo-0125",
+            messages=messages,
+            temperature=1,
+            max_tokens=256,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0
+            )
     return query.choices[0].message.content
-    '''
-
-
+    
 def soup(url):
     if url:
         req = requests.get(url)
@@ -58,26 +59,35 @@ def soup(url):
         string_values = []
         return string_values
     
+path = '/Users/Tom/Documents/Programs/Product Comparator/Product-Comparator/chromedriver-win64/chromedriver.exe'
+service = Service(executable_path=path)
+op = webdriver.ChromeOptions()
+op.add_argument("--headless")
+driver = webdriver.Chrome(service=service, options=op)    
+    
 def selenium_app(url):
     if url:
-        path = 'C:/Users/rohan/Visual Studios/Product Comparator Repo/Product-Comparator/chromedriver-win64/chromedriver.exe'
-        service = Service(executable_path=path)
-        op = webdriver.ChromeOptions()
-        op.add_argument("--headless")
-        driver = webdriver.Chrome(service=service, options=op)
+        global driver
         driver.get(url)
         
-        #wait = WebDriverWait(driver, 10)
         if 'amazon' in url:
-            products = WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="a-keyvalue prodDetTable"]')))
+            price = WebDriverWait(driver, 1).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="a-price-whole"]')))
+            products = WebDriverWait(driver, 1).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="a-keyvalue prodDetTable"]')))
+            final_price = price[4]
+            
         elif 'flipkart' in url:
-            button = WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH, "//button[@class='QqFHMw _4FgsLt']")))
+            price = WebDriverWait(driver, 1).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="Nx9bqj CxhGGd"]')))
+            final_price = price[0]
+            button = WebDriverWait(driver, 1).until(EC.element_to_be_clickable((By.XPATH, "//button[@class='QqFHMw _4FgsLt']")))
             button.click()
-            products = WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="_3Fm-hO"]')))
+            products = WebDriverWait(driver, 2).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="_3Fm-hO"]')))
+        
         elif 'jiomart' in url:
-            button = WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH, "//button[@data-target='#pdp_tech_specifications']")))
+            price = WebDriverWait(driver, 1).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="jm-heading-xs jm-ml-xxs"]')))
+            final_price = price[0]
+            button = WebDriverWait(driver, 1).until(EC.element_to_be_clickable((By.XPATH, "//button[@data-target='#pdp_tech_specifications']")))
             button.click()
-            products = WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="product-specifications-wrapper"]')))
+            products = WebDriverWait(driver, 2).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="product-specifications-wrapper"]')))
         else:
             print("Invalid URL:", url)
             string_values = []
@@ -91,9 +101,29 @@ def selenium_app(url):
         print("Invalid URL:", url)
         string_values = []
         
-    driver.quit()
-    return string_values
+    return string_values, final_price.text
     
+    
+def price(url):
+    global driver
+    driver.get(url)
+    
+    title = product_title = ""
+
+    if 'flipkart' in url:
+        title = WebDriverWait(driver, 1).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="VU-ZEz"]')))
+        for titles in title:
+            print(titles.text)
+            product_title = titles.text 
+            
+        driver.get("https://www.amazon.in")
+        input_element=driver.find_element(By.XPATH,'//*[@id="twotabsearchtextbox"]') 
+        input_element.send_keys(product_title + Keys.ENTER)
+        time.sleep(2)
+        url_now=driver.current_url
+        
+    return url_now
+        
 
 @app.route('/hello_world', methods=['POST'])
 def hello_world():
@@ -101,29 +131,31 @@ def hello_world():
     product2 = request.form['select2']
     requirements = request.form['requirements']
     
-    raw1 = selenium_app(product1)
-    raw2 = selenium_app(product2)
+    if 'ebay' in product1 or 'snapdeal' in product1:
+        raw1 = soup(product1)
+        raw2 = soup(product2)
+    else:
+        raw1, price1 = selenium_app(product1)
+        raw2, price2 = selenium_app(product2)
     
-    test = "Could you simplify the following data so that the average joe can make sense of it while being as concise and descriptive as possible: " + " ".join(raw1)
-    
-    info1 = model.generate_content(test)
-    info = info1.text
-    cleaned_info = info.replace("**", "").replace("*", "").strip()
-    
-    test = "Could you simplify the following data so that the average joe can make sense of it while being as concise and descriptive as possible: " + " ".join(raw2)
-    info2 = model.generate_content(test)
-    info2 = info2.text
-    cleaned_info2 = info2.replace("**", "").replace("*", "").strip()
+    test = "Could you simplify the following data and break into portions such as Name, Description, Specificaions and so on (avoid bold text): \n" + "".join(raw1)   
+    info1 = get_completion(test)
+ 
+    test = "Could you simplify the following data and break into portions such as Name, Description, Specificaions and so on (avoid bold text): \n" + "".join(raw2)
+    info2 = get_completion(test)
 
-
-    # Pass markdown_info1 to the template
-    return render_template('front2.html', info1=cleaned_info, info2=cleaned_info2)
+    atexit.register(close_driver)
+    return render_template('front2.html', info1=info1, info2=info2, price1=price1, price2=price2)
 
 @app.route('/')
 def index():
     return render_template('front.html')
 
 
-# main driver function
+def close_driver():
+    global driver
+    if driver:
+        driver.quit()
+
 if __name__ == '__main__':
     app.run(debug=True)
