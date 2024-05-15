@@ -18,8 +18,14 @@
         // Show the comparison result containers
         document.getElementById("result1").style.display = "block";
         document.getElementById("result2").style.display = "block";
-        document.getElementById("price1").style.display = "block";
-        document.getElementById("price2").style.display = "block";
+        document.getElementById("price-btn").style.display = "block";
+        /*document.getElementById("price1").style.display = "block";
+        document.getElementById("price2").style.display = "block";*/
         document.getElementById("conclusion").style.display = "block";
     }
 
+function pricecomparator() {
+        document.getElementById("price1").style.display = "block";
+        document.getElementById("price2").style.display = "block";
+        /*document.getElementById("conclusion").style.display = "block";*/
+}
