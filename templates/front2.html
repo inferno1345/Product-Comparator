@@ -18,6 +18,14 @@
 
     <style>
         /* General Styles */
+        .logo{
+            position:center;
+            object-fit:cover;
+            display: block;
+            width: 20%;
+            margin-right:auto;
+            margin-left: auto;
+        }
         body {
             background-color: #f8f9fa;
             font-family: "Poppins", sans-serif;
@@ -97,6 +105,20 @@
             background-color: #2e3236;
         }
 
+        .price-btn {
+            background-color: #343a40;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #price-btn{
+            display: none;
+        }
+
         /* Heading Styles */
         .heading {
             font-weight: 600;
@@ -110,7 +132,14 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             padding: 20px;
             margin-top: 20px;
-            display: block; /* Making sure this container is visible */
+            display: block; 
+            word-wrap: break-word;
+        }
+        #conclusion {
+            margin: 0 auto;
+            text-align: center;
+            margin-top: 60px;
+            margin-bottom: 50px;
         }
 
         .result-title {
@@ -177,40 +206,56 @@
         <div class="row mt-5" id="resultContainer">
             <div class="col-md-6 result-container" id="result1">
                 <div class="result-title">Result for Product 1</div>
-                <div class="container pre-wrap" id="result1-text"></div>
+                <div class="result-container" id="result1-text"></div>
                    <pre> {{ info1 | safe }} </pre>
             </div>
         
             <div class="col-md-6 result-container" id="result2">
                 <div class="result-title">Result for Product 2</div>
-                <div class="container pre-wrap" id="result2-text"></div>
+                <div class="result-container" id="result2-text"></div>
                   <pre>  {{ info2 | safe }} </pre>
-            </div>
-        </div>
-        <div class="row mt-5">
-            <div class="col-md-6 result-container" id="price1">
-                <div class="result-title">Price for Product 1</div>
-                <div class="result-text" id="result1-text"></div>
-            </div>
-            <div class="col-md-6 result-container" id="price2">
-                <div class="result-title">Price for Product 2</div>
-                <div class="result-text" id="result2-text"></div>
             </div>
             <div class="col-md-6 result-container" id="conclusion">
                 <div class="result-title">Conclusion</div>
                 <div class="result-text" id="result2-text"></div>
             </div>
         </div>
+        <div class="text-center" id="price-btn">
+            <button class="price-btn" onclick="pricecomparator()">Price Comparator</button>
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-6 result-container" id="price1">
+                <div class="result-title">Price for Product 1</div>
+                <div class="result-text" id="result1-text">
+                    {{ price1 | safe}}
+                </div>
+            </div>
+            <div class="col-md-6 result-container" id="price2">
+                <div class="result-title">Price for Product 2</div>
+                <div class="result-text" id="result2-text">
+                    {{price2 | safe}}
+                </div>
+            </div>
+        </div>
     </form>
 </div>
 
 <script>
-    // Retrieve input values from local storage and populate form fields
-    document.addEventListener("DOMContentLoaded", function() {
-        document.getElementById('select1').value = localStorage.getItem('select1');
-        document.getElementById('select2').value = localStorage.getItem('select2');
-        document.getElementById('requirements').value = localStorage.getItem('requirements');
-    });
+
+    function compareProducts() {
+
+        document.getElementById("result1").style.display = "block";
+        document.getElementById("result2").style.display = "block";
+        document.getElementById("price-btn").style.display = "block";
+        /*document.getElementById("price1").style.display = "block";
+        document.getElementById("price2").style.display = "block";*/
+        document.getElementById("conclusion").style.display = "block";
+    }
+    function pricecomparator() {
+        document.getElementById("price1").style.display = "block";
+        document.getElementById("price2").style.display = "block";
+        /*document.getElementById("conclusion").style.display = "block";*/
+}
 </script>
 
 

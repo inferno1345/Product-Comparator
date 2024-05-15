@@ -16,6 +16,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <style>
         /* General Styles */
+        .logo{
+            position:center;
+            object-fit:cover;
+            display: block;
+            width: 20%;
+            margin-right:auto;
+            margin-left: auto;
+        }
         body {
             background-color: #f8f9fa;
             font-family: "Poppins", sans-serif;
@@ -95,6 +103,19 @@
             background-color: #2e3236;
         }
 
+        .price-btn {
+            background-color: #343a40;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #price-btn{
+            display: none;
+        }
         /* Heading Styles */
         .heading {
             font-weight: 600;
@@ -109,6 +130,13 @@
             padding: 20px;
             margin-top: 20px;
             display: none;
+            word-wrap: break-word;
+        }
+        #conclusion {
+            margin: 0 auto;
+            text-align: center;
+            margin-top: 60px;
+            margin-bottom: 50px;
         }
 
         .result-title {
@@ -129,7 +157,7 @@
 
 </head>
 <body>
-
+<img src="{{ url_for('static', filename='logo-removebg.png') }}" class="logo">
 <div class="container">
     <h1 class="display-5 text-center heading">Product Comparator</h1>
     <!-- Add an ID to the form -->
@@ -138,10 +166,10 @@
             <tr class="bg-dark text-white">
                 <th>Select Products:</th>
                 <th>
-                    <input type="text" class="form-control" id="select1" name="select1" onchange="updateProduct(1, this.value)" placeholder="Enter Product 1">
+                    <input type="text" class="form-control" id="select1" name="select1" onchange="updateProduct(1, this.value)" placeholder="Enter Product 1" required>
                 </th>
                 <th>
-                    <input type="text" class="form-control" id="select2" name="select2" onchange="updateProduct(2, this.value)" placeholder="Enter Product 2">
+                    <input type="text" class="form-control" id="select2" name="select2" onchange="updateProduct(2, this.value)" placeholder="Enter Product 2" required>
                 </th>
             </tr>
             <tr class="bg-dark text-white">
@@ -168,6 +196,24 @@
                 <div class="result-title">Result for Product 2</div>
                 <div class="result-text" id="result2-text"></div>      
             </div>
+
+            <div class="col-md-6 result-container" id="conclusion">
+                <div class="result-title">Conclusion</div>
+                <div class="result-text" id="result2-text"></div>
+            </div>
+        </div>
+        <div class="text-center" id="price-btn">
+            <button class="price-btn" onclick="pricecomparator()">Price Comparator</button>
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-6 result-container" id="price1">
+                <div class="result-title">Price for Product 1</div>
+                <div class="result-text" id="result1-text"></div>
+            </div>
+            <div class="col-md-6 result-container" id="price2">
+                <div class="result-title">Price for Product 2</div>
+                <div class="result-text" id="result2-text"></div>
+            </div>
         </div>
 
     </form>
@@ -175,25 +221,39 @@
 <!-- <script src="{{ url_for('static', filename='jsnew.js') }}"></script> -->
 
 <script>
+    
+
     function compareProducts() {
-        // Submit the form
-        document.getElementById("productForm").submit();
+        // Get the values of the selected products and requirements
+        var product1 = document.getElementById("select1").value;
+        var product2 = document.getElementById("select2").value;
+        var requirements = document.getElementById("requirements").value;
+
+        // Perform comparison logic (example: just logging for demonstration)
+        console.log("Product 1: " + product1);
+        console.log("Product 2: " + product2);
+        console.log("Requirements: " + requirements);
+
+        // Display the comparison results in the respective result containers
+        document.getElementById("result1-text").innerHTML = "Product 1: " + product1 + "<br>Requirements: " + requirements;
+        document.getElementById("result2-text").innerHTML = "Product 2: " + product2 + "<br>Requirements: " + requirements;
+
+        // Show the comparison result containers
+        document.getElementById("result1").style.display = "block";
+        document.getElementById("result2").style.display = "block";
+        document.getElementById("price-btn").style.display = "block";
+        /*document.getElementById("price1").style.display = "block";
+        document.getElementById("price2").style.display = "block";*/
+        document.getElementById("conclusion").style.display = "block";
     }
 
-    // Add event listener to the "Compare Products" button
-    document.getElementById("compareButton").addEventListener("click", function() {
-        // Show the result container
-        document.getElementById("resultContainer").style.display = "block";
-        // Call compareProducts() function to submit the form
-        compareProducts();
-    });
+function pricecomparator() {
+        document.getElementById("price1").style.display = "block";
+        document.getElementById("price2").style.display = "block";
+        /*document.getElementById("conclusion").style.display = "block";*/
+}
 
-    function storeInputValues() {
-        // Store input values in local storage
-        localStorage.setItem('select1', document.getElementById('select1').value);
-        localStorage.setItem('select2', document.getElementById('select2').value);
-        localStorage.setItem('requirements', document.getElementById('requirements').value);
-    }
+
 
 </script>
 
