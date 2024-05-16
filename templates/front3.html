@@ -181,16 +181,17 @@
                 <div class="result-title">Price for Product 1</div>
                 <div class="result-text" id="result1-text">
                     {{ price1 | safe }} <br>
-                    <a href="{{ url_now1 }}" target="_blank">See in Amazon</a>
+                    <a href="{{ url_now1 }}" target="_blank">Check it out!</a>
                     <br><br>
-                    {{ price2 | safe }} <br>
-                    <a href="{{ url_now2 }}" target="_blank">See in JioMart</a>
+                    
+                    
                 </div>
             </div>
             <div class="col-md-6 result-container" id="price2">
                 <div class="result-title">Price for Product 2</div>
                 <div class="result-text" id="result2-text">
-                    
+                    {{ price2 | safe }} <br>
+                    <a href="{{ url_now2 }}" target="_blank">Check it out!</a>
                 </div>
             </div>
         </div>
