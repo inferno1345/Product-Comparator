@@ -167,6 +167,12 @@
         font-size: 16px;
         line-height: 1.6;
     }
+    .sizelim {
+        overflow-x: auto; /* Enables horizontal scrolling if needed */
+        word-wrap: break-word; /* Breaks long words to prevent horizontal overflow */
+        white-space: pre-wrap; /* Preserves formatting and wraps text */
+    }
+
 </style>
 
 </head>
@@ -194,16 +200,16 @@
         <div class="row mt-5" id="resultContainer">
             <div class="col-md-6 result-container" id="result1">
                 <div class="result-title">Result for Product 1</div>
-                   <pre> {{ info1 | safe }} </pre>
+                   <pre class="sizelim"> {{ info1 | safe }} </pre>
             </div>
         
             <div class="col-md-6 result-container" id="result2">
                 <div class="result-title">Result for Product 2</div>
-                  <pre>  {{ info2 | safe }} </pre>
+                  <pre class="sizelim">  {{ info2 | safe }} </pre>
             </div>
             <div class="col-md-6 result-container" id="conclusion">
                 <div class="result-title">Conclusion</div>
-                    <pre> {{ conc | safe }} </pre>
+                    <pre class="sizelim"> {{ conc | safe }} </pre>
             </div>
         </div>
         <form action="/price_comp" method="POST" id="compareButton">
