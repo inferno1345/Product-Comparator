@@ -39,6 +39,7 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
             overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         th {
@@ -97,6 +98,7 @@
             font-size: 18px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         .compare-btn:hover {
@@ -120,6 +122,7 @@
         .heading {
             font-weight: 600;
             margin-bottom: 2rem;
+            text-shadow: 0px 0px 10px rgba(255,255,255, 0.5);
         }
 
         /* Result Containers */
@@ -167,7 +170,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: "{{ url_for('static', 'backgroundimgproductcomp.png') }}"; /* URL of your background image  */
+            background-image: url('/static/backgroundimgproductcomp.png'); /* URL of your background image  */
             background-size: cover;
             background-position: center;
             filter: blur(5px); /* Adjust the blur radius as needed */
@@ -177,7 +180,7 @@
 
 </head>
 <body>
-    <div class="background-container">
+<div class="background-container">
 <img src="{{ url_for('static', filename='logo-removebg.png') }}" class="logo">
 <div class="container">
     <h1 class="display-5 text-center heading">Product Comparator</h1>
@@ -239,8 +242,9 @@
 
     </form>
 </div>
-<!-- <script src="{{ url_for('static', filename='jsnew.js') }}"></script> -->
 </div>
+<!-- <script src="{{ url_for('static', filename='jsnew.js') }}"></script> -->
+
 <script>
     
 

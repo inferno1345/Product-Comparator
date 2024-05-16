@@ -71,7 +71,7 @@ def soup(url):
         print("Invalid URL:", url)
         return string_values, final_price
     
-path = 'C:/Users/rohan/Visual Studios/Product Comparator Repo/Product-Comparator/chromedriver-win64/chromedriver.exe'
+path = '/Users/Tom/Documents/Programs/Product Comparator/Product-Comparator/chromedriver-win64/chromedriver.exe'
 service = Service(executable_path=path)
 op = webdriver.ChromeOptions()
 
@@ -88,7 +88,7 @@ def selenium_app(url):
             for prices in price:
                 final=prices
                 print(final.text)
-            final_price = price[0]
+            final_price = price[4]
             
         elif 'flipkart' in url:
             price = WebDriverWait(driver, 1).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="Nx9bqj CxhGGd"]')))
