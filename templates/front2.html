@@ -176,7 +176,6 @@
     <img src="{{ url_for('static', filename='logo-removebg.png') }}" class="logo">
     <h1 class="display-5 text-center heading">Product Comparator</h1>
     <!-- Add an ID to the form -->
-    <form id="productForm" action="/hello_world" method="POST">
         <div class="row mt-5">
             <div class="col-md-6 result-container" id="price1">
                 <div class="result-title">Price for Product 1</div>
@@ -206,10 +205,11 @@
                 <div class="result-title">Conclusion</div>
             </div>
         </div>
-        <div class="text-center">
-            <button class="price-btn" onclick="pricecomparator()">Price Comparator</button>
-        </div>
-    </form>
+        <form action="/price_comp" method="POST" id="compareButton">
+            <div class="text-center">
+                <button class="price-btn" onclick="pricecomparator()">Price Comparator</button>
+            </div>
+        </form>
 </div>
 
 <script>

@@ -253,7 +253,13 @@ function pricecomparator() {
         /*document.getElementById("conclusion").style.display = "block";*/
 }
 
-
+document.getElementById('productForm').addEventListener('submit', function(event) {
+    var dataInput = document.getElementById('dataInput').value;
+    if (!dataInput) {
+        alert('Please enter data');
+        event.preventDefault(); // Prevent form submission
+    }
+});
 
 </script>
 

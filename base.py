@@ -18,6 +18,8 @@ app = Flask(__name__)
 
 client = OpenAI(api_key = 'sk-proj-P1Geb3FAub2ams0wnB11T3BlbkFJoKKaUmjYdXrlTHv2HzNr')
 
+product1=""
+
 def get_completion(prompt): 
     messages=[
         {"role": "system", "content": "You are a data analyzer who compares information and helps the average person to identify the pros and cons of a product while being as consistent as possible with readable format"},
@@ -62,14 +64,14 @@ def soup(url):
 path = '/Users/Tom/Documents/Programs/Product Comparator/Product-Comparator/chromedriver-win64/chromedriver.exe'
 service = Service(executable_path=path)
 op = webdriver.ChromeOptions()
-op.add_argument("--headless")
-driver = webdriver.Chrome(service=service, options=op)    
+
+driver = webdriver.Chrome(service=service)    
     
 def selenium_app(url):
     if url:
         global driver
         driver.get(url)
-        
+        time.sleep(3)
         if 'amazon' in url:
             price = WebDriverWait(driver, 1).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="a-price-whole"]')))
             products = WebDriverWait(driver, 1).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="a-keyvalue prodDetTable"]')))
@@ -103,13 +105,14 @@ def selenium_app(url):
         
     return string_values, final_price.text
     
-    
-def price(url):
+@app.route('/price_comp', methods=['POST'])
+def price():
     global driver
+    url = product1
+    print(url)
     driver.get(url)
-    
     title = product_title = ""
-
+    url_now1 = url_now2 = price1 = price2 = ""
     if 'flipkart' in url:
         title = WebDriverWait(driver, 1).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="VU-ZEz"]')))
         for titles in title:
@@ -117,16 +120,28 @@ def price(url):
             product_title = titles.text 
             
         driver.get("https://www.amazon.in")
-        input_element=driver.find_element(By.XPATH,'//*[@id="twotabsearchtextbox"]') 
+        input_element = driver.find_element(By.XPATH,'//*[@id="twotabsearchtextbox"]') 
         input_element.send_keys(product_title + Keys.ENTER)
         time.sleep(2)
-        url_now=driver.current_url
+        url_now1 = driver.current_url
+        print(url_now1)
+        price = WebDriverWait(driver, 2).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="a-price-whole"]')))
+        price1 = price[1].text
         
-    return url_now
+        driver.get("https://www.jiomart.com")
+        input_element = driver.find_element(By.XPATH,'//*[@class="aa-Input search_input"]') 
+        input_element.send_keys(product_title + Keys.ENTER)
+        url_now2 = driver.current_url
+        print(url_now2)
+        price = WebDriverWait(driver, 2).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="jm-heading-xxs jm-mb-xxs"]')))
+        price2 = price[0].text
+        
+    return render_template('front3.html', url_now1=url_now1, price1=price1, url_now2=url_now2, price2=price2)
         
 
 @app.route('/hello_world', methods=['POST'])
 def hello_world():
+    global product1
     product1 = request.form['select1']
     product2 = request.form['select2']
     requirements = request.form['requirements']
