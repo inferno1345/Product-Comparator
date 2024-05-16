@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+from httpx import TimeoutException
 from numpy import require
 from pyparsing import stringStart
 import requests
@@ -55,7 +56,7 @@ def soup(url):
             price = content.find_all('span',class_='payBlkBig')
         else:
             print("Invalid URL:", url)
-            return string_values, final_price
+            return string_values
         
         for spec_div in spec_divs:
             text = spec_div.text.strip()
@@ -65,11 +66,11 @@ def soup(url):
             svar = div.text.strip()
             final_price.append(svar)
             
-        return string_values, final_price
+        return string_values
     
     else:
         print("Invalid URL:", url)
-        return string_values, final_price
+        return string_values
     
 path = '/Users/Tom/Documents/Programs/Product Comparator/Product-Comparator/chromedriver-win64/chromedriver.exe'
 service = Service(executable_path=path)
@@ -81,14 +82,13 @@ def selenium_app(url):
     if url:
         global driver
         driver.get(url)
-        time.sleep(3)
         if 'amazon' in url:
             price = WebDriverWait(driver, 1).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="a-price-whole"]')))
             products = WebDriverWait(driver, 1).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="a-keyvalue prodDetTable"]')))
             for prices in price:
                 final=prices
                 print(final.text)
-            final_price = price[4]
+            final_price = price[5]
             
         elif 'flipkart' in url:
             price = WebDriverWait(driver, 1).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="Nx9bqj CxhGGd"]')))
@@ -123,13 +123,17 @@ def price():
     global driver
     url = product1
     driver.get(url)
+    driver.implicitly_wait(1)
     title = product_title = ""
     url_now1 = url_now2 = price_now1 = price_now2 = ""
     if 'flipkart' in url:
         title = WebDriverWait(driver, 1).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="VU-ZEz"]')))
         for titles in title:
             product_title = titles.text 
-   
+            
+        words = product_title.split()
+        product_title = ' '.join(words[:6])
+        
         driver.get("https://www.amazon.in")
         input_element = driver.find_element(By.XPATH,'//*[@id="twotabsearchtextbox"]') 
         time.sleep(1)
@@ -143,12 +147,19 @@ def price():
         for titles in title:
             product_title = titles.text
             
+        words = product_title.split()
+        product_title = ' '.join(words[:6])
+        
         driver.get("https://www.flipkart.com")
         input_element = driver.find_element(By.XPATH, '//*[@class="Pke_EE"]')
         input_element.send_keys(product_title + Keys.ENTER)
         url_now1 = driver.current_url
-        price = WebDriverWait(driver, 2).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="Nx9bqj _4b5DiR"]')))
+        price = WebDriverWait(driver, 2).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="Nx9bqj _4b5DiR"]') or (By.XPATH, '//*[@class="Nx9bqj"]')))
+        for prices in price:
+                final=prices
+                print(final.text)
         price_now1 = price[2].text
+
     
     url = product2
     price = []   
@@ -158,7 +169,10 @@ def price():
         title = WebDriverWait(driver, 1).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="VU-ZEz"]')))
         for titles in title:
             product_title = titles.text 
-   
+
+        words = product_title.split()
+        product_title = ' '.join(words[:6])
+        
         driver.get("https://www.amazon.in")
         input_element = driver.find_element(By.XPATH,'//*[@id="twotabsearchtextbox"]') 
         time.sleep(1)
@@ -171,12 +185,18 @@ def price():
         title = WebDriverWait(driver, 1).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="a-size-large product-title-word-break"]')))
         for titles in title:
             product_title = titles.text
-            
+        
+        words = product_title.split()
+        product_title = ' '.join(words[:6])
+         
         driver.get("https://www.flipkart.com")
         input_element = driver.find_element(By.XPATH, '//*[@class="Pke_EE"]')
         input_element.send_keys(product_title + Keys.ENTER)
         url_now2 = driver.current_url
-        price = WebDriverWait(driver, 2).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="Nx9bqj _4b5DiR"]')))
+        price = WebDriverWait(driver, 2).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="Nx9bqj _4b5DiR"]') or (By.XPATH, '//*[@class="Nx9bqj"]')))
+        for prices in price:
+                final=prices
+                print(final.text)
         price_now2 = price[2].text
         
     return render_template('front3.html', url_now1=url_now1, price1=price_now1, url_now2=url_now2, price2=price_now2)

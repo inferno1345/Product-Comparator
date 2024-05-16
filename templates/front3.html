@@ -121,7 +121,7 @@
         .heading {
             font-weight: 600;
             margin-bottom: 2rem;
-            text-shadow: 0px 0px 10px rgba(255,255,255, 0.5);
+            text-shadow: 5px 5px 100px rgba(255,255,255, 0.5);
         }
 
         /* Result Containers */
@@ -202,7 +202,7 @@
     <!-- Add an ID to the form -->
         <div class="row mt-5">
             <div class="col-md-6 result-container" id="price1">
-                <div class="result-title">Price for Product 1</div>
+                <div class="result-title">Price for Product 1 in other Websites</div>
                 <div class="result-text" id="result1-text">
                     {{ price1 | safe }} <br>
                     <a href="{{ url_now1 }}" target="_blank">Check out similar products!</a>
@@ -212,7 +212,7 @@
                 </div>
             </div>
             <div class="col-md-6 result-container" id="price2">
-                <div class="result-title">Price for Product 2</div>
+                <div class="result-title">Price for Product 2 in other Websites</div>
                 <div class="result-text" id="result2-text">
                     {{ price2 | safe }} <br>
                     <a href="{{ url_now2 }}" target="_blank">Check out similar products!</a>
