@@ -22,7 +22,8 @@ product1=""
 
 def get_completion(prompt): 
     messages=[
-        {"role": "system", "content": "You are a data analyzer who compares information and helps the average person to identify the pros and cons of a product while being as consistent as possible with readable format"},
+        {"role": "system", "content": "You are a data analyzer who compares information and helps the average person to identify the pros and cons of a product while being as consistent as possible with readable format."},
+        {"role": "system", "content": "You also give the details as concise bullet points."},
         {"role": "user", "content": prompt}
         ]
     query = client.chat.completions.create(
@@ -109,22 +110,19 @@ def selenium_app(url):
 def price():
     global driver
     url = product1
-    print(url)
     driver.get(url)
     title = product_title = ""
     url_now1 = url_now2 = price1 = price2 = ""
     if 'flipkart' in url:
         title = WebDriverWait(driver, 1).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="VU-ZEz"]')))
         for titles in title:
-            print(titles.text)
             product_title = titles.text 
-            
+   
         driver.get("https://www.amazon.in")
         input_element = driver.find_element(By.XPATH,'//*[@id="twotabsearchtextbox"]') 
+        time.sleep(1)
         input_element.send_keys(product_title + Keys.ENTER)
-        time.sleep(2)
         url_now1 = driver.current_url
-        print(url_now1)
         price = WebDriverWait(driver, 2).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="a-price-whole"]')))
         price1 = price[1].text
         
@@ -132,7 +130,6 @@ def price():
         input_element = driver.find_element(By.XPATH,'//*[@class="aa-Input search_input"]') 
         input_element.send_keys(product_title + Keys.ENTER)
         url_now2 = driver.current_url
-        print(url_now2)
         price = WebDriverWait(driver, 2).until(EC.presence_of_all_elements_located((By.XPATH, '//*[@class="jm-heading-xxs jm-mb-xxs"]')))
         price2 = price[0].text
         
@@ -158,9 +155,12 @@ def hello_world():
  
     test = "Could you simplify the following data and break into portions such as Name, Description, Specificaions and so on (avoid bold text): \n" + "".join(raw2)
     info2 = get_completion(test)
-
+    
+    test = "Comparing the two products, can you briefly describe which could be better in regards to price, performance and other details? Price for 1 = " + price1 + " Price for 2 = " + price2 + " (Speak in third person while giving bullet points please)"
+    conclusion = get_completion(test)
+    
     atexit.register(close_driver)
-    return render_template('front2.html', info1=info1, info2=info2, price1=price1, price2=price2)
+    return render_template('front2.html', info1=info1, info2=info2, price1=price1, price2=price2, conc=conclusion)
 
 @app.route('/')
 def index():

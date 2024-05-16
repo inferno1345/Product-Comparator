@@ -176,27 +176,29 @@
     <img src="{{ url_for('static', filename='logo-removebg.png') }}" class="logo">
     <h1 class="display-5 text-center heading">Product Comparator</h1>
     <!-- Add an ID to the form -->
-    <form id="productForm" action="/hello_world" method="POST">
         <div class="row mt-5">
             <div class="col-md-6 result-container" id="price1">
                 <div class="result-title">Price for Product 1</div>
                 <div class="result-text" id="result1-text">
-                    {{ price1 | safe }}
-                    {{ url_now1 | safe }}
+                    {{ price1 | safe }} <br>
+                    <a href="{{ url_now1 }}" target="_blank">See in Amazon</a>
+                    <br><br>
+                    {{ price2 | safe }} <br>
+                    <a href="{{ url_now2 }}" target="_blank">See in JioMart</a>
                 </div>
             </div>
             <div class="col-md-6 result-container" id="price2">
                 <div class="result-title">Price for Product 2</div>
                 <div class="result-text" id="result2-text">
-                    {{ price2 | safe }}
-                    {{ url_now2 | safe }}
+                    
                 </div>
             </div>
         </div>
+        <form action="/" method="GET">
         <div class="text-center">
             <button class="price-btn" onclick="home()">Go Back to Home</button>
         </div>
-    </form>
+        </form>
 </div>
 
 <script>
