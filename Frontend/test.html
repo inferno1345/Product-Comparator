@@ -24,6 +24,31 @@
         body {
             background-color: #fffffb;
             font-family: "Poppins", sans-serif;
+            background-image: url('backgroundimgproductcomp.png'); /* URL of your background image */
+            background-size: cover; /* Cover the entire background */
+            background-position: center; /* Center the background image */
+            background-repeat: no-repeat; /* Do not repeat the background image */
+        }
+        .background-container {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Place the container behind other content */
+        }
+
+        .background-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('backgroundimgproductcomp.png'); /* URL of your background image */
+            background-size: cover;
+            background-position: center;
+            filter: blur(5px); /* Adjust the blur radius as needed */
+            z-index: -1; /* Ensure the blur effect is behind other content */
         }
 
         .container {
@@ -149,15 +174,16 @@
             line-height: 1.6;
         }
 /* Adjust the margin for the row containing result containers */
-.result-section {
-    margin-top: 10px; /* You can adjust this value to your preference */
-}
+    .result-section {
+        margin-top: 10px; /* You can adjust this value to your preference */
+        }
+
 
     </style>
 
 </head>
-<img src="backgroundimgproductcomp.png">
 <body>
+    <div class="background-container">
 <img src="logo-removebg.png" class="logo">
 <div class="container">
     <h1 class="display-5 text-center heading">Product Comparator</h1>
@@ -214,5 +240,6 @@
     </div>
 </div>
 <script src="jsnew.js"></script>
+</div>
 </body>
 </html>
