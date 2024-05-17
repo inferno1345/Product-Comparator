@@ -1,7 +1,4 @@
 from flask import Flask, render_template, request
-from httpx import TimeoutException
-from numpy import require
-from pyparsing import stringStart
 import requests
 import time
 import atexit
@@ -19,7 +16,7 @@ from selenium.webdriver.common.keys import Keys
 
 app = Flask(__name__)
 
-client = OpenAI(api_key = 'sk-proj-P1Geb3FAub2ams0wnB11T3BlbkFJoKKaUmjYdXrlTHv2HzNr')
+client = OpenAI(api_key = 'ENTER_API_KEY')
 
 product1 = ""
 product2 = ""
@@ -72,7 +69,7 @@ def soup(url):
         print("Invalid URL:", url)
         return string_values
     
-path = '/Users/Tom/Documents/Programs/Product Comparator/Product-Comparator/chromedriver-win64/chromedriver.exe'
+path = 'ENTER_PATH_TO_WEBDRIVER'
 service = Service(executable_path=path)
 op = webdriver.ChromeOptions()
 #op.add_argument("--headless")
