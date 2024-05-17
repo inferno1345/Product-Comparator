@@ -1,3 +1,20 @@
 # Product-Comparator
-if you're making a new javascript file, put it inside the 'static' folder.  
-Also in the html doc, use <script src="{{ url_for('static', filename='script.js') }}"></script> as the format instead of the normal one replacing 'script.js' witht the actual name.  
+Mini project.
+
+A working prototype of a website that can compare products. It uses Selenium and BeautifulSoup as a webscaper to extract information of products and then passes it on to AI to simplify and compare them. It also has an external feature which is called price comparator, which barely works as it needs improvements (mostly because flipkart is "InTeReStInG"... ).
+
+Deploy like any other flask app after providing your OpenAI api keys and the path to the webdriver in base.py . 
+
+Languages used : Python Flask
+
+Web-side : HTML, CSS
+
+# Credits:
+
+Renu Lijo - Frontend skeleton
+
+Rhea John - Frontend design
+
+Rohan Jojo - BeautifulSoup integration, website design and backend work
+
+Tom Rajeev - Selenium integration, AI integration and backend work
