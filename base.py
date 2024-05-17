@@ -75,8 +75,9 @@ def soup(url):
 path = '/Users/Tom/Documents/Programs/Product Comparator/Product-Comparator/chromedriver-win64/chromedriver.exe'
 service = Service(executable_path=path)
 op = webdriver.ChromeOptions()
-
-driver = webdriver.Chrome(service=service)    
+#op.add_argument("--headless")
+driver = webdriver.Chrome(service=service)  
+#driver = webdriver.Chrome(service=service, options=op)
     
 def selenium_app(url):
     if url:
@@ -160,7 +161,7 @@ def price():
                 print(final.text)
         price_now1 = price[2].text
 
-    
+    print("\n")
     url = product2
     price = []   
     title = product_title = ""
